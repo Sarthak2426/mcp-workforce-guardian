@@ -1,0 +1,102 @@
+[
+  {
+    "id": "cust_001",
+    "name": "Ananya Rao",
+    "email": "ananya.rao@example.com",
+    "phone": "+91-98200-11111",
+    "plan": "Pro",
+    "status": "active",
+    "signup_date": "2024-03-11",
+    "notes": "Upgraded from Basic in June 2025."
+  },
+  {
+    "id": "cust_002",
+    "name": "Devesh Malhotra",
+    "email": "devesh.m@example.com",
+    "phone": "+91-98200-22222",
+    "plan": "Basic",
+    "status": "active",
+    "signup_date": "2023-11-02",
+    "notes": "Frequently contacts support about billing."
+  },
+  {
+    "id": "cust_003",
+    "name": "Priya Nair",
+    "email": "priya.nair@example.com",
+    "phone": "+91-98200-33333",
+    "plan": "Enterprise",
+    "status": "active",
+    "signup_date": "2022-07-19",
+    "notes": "Key account, quarterly business review scheduled."
+  },
+  {
+    "id": "cust_004",
+    "name": "Karan Mehta",
+    "email": "karan.mehta@example.com",
+    "phone": "+91-98200-44444",
+    "plan": "Pro",
+    "status": "cancelled",
+    "signup_date": "2024-01-05",
+    "notes": "Cancelled after price increase."
+  },
+  {
+    "id": "cust_005",
+    "name": "Sneha Kulkarni",
+    "email": "sneha.k@example.com",
+    "phone": "+91-98200-55555",
+    "plan": "Basic",
+    "status": "active",
+    "signup_date": "2025-02-14",
+    "notes": ""
+  },
+  {
+    "id": "cust_006",
+    "name": "Rohit Sharma",
+    "email": "rohit.sharma@example.com",
+    "phone": "+91-98200-66666",
+    "plan": "Pro",
+    "status": "active",
+    "signup_date": "2024-09-23",
+    "notes": "Referred by cust_003."
+  },
+  {
+    "id": "cust_007",
+    "name": "Fatima Sheikh",
+    "email": "fatima.sheikh@example.com",
+    "phone": "+91-98200-77777",
+    "plan": "Enterprise",
+    "status": "active",
+    "signup_date": "2021-12-01",
+    "notes": "Contract renews annually in December."
+  },
+  {
+    "id": "cust_008",
+    "name": "Arjun Verma",
+    "email": "arjun.verma@example.com",
+    "phone": "+91-98200-88888",
+    "plan": "Basic",
+    "status": "active",
+    "signup_date": "2025-05-30",
+    "notes": "New signup, still in onboarding."
+  },
+  {
+    "id": "cust_009",
+    "name": "Meera Iyer",
+    "email": "meera.iyer@example.com",
+    "phone": "+91-98200-99999",
+    "plan": "Pro",
+    "status": "active",
+    "signup_date": "2023-06-17",
+    "notes": ""
+  },
+  {
+    "id": "cust_010",
+    "name": "Vikram Singh",
+    "email": "vikram.singh@example.com",
+    "phone": "+91-98200-10101",
+    "plan": "Basic",
+    "status": "cancelled",
+    "signup_date": "2022-10-08",
+    "notes": "Churned, win-back campaign in progress."
+  }
+]
