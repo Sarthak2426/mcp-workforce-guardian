@@ -102,13 +102,13 @@ blocks until a decision appears or the timeout elapses, then fails closed.
 
 Nine `@mcp.tool()` functions:
 
-| Tool | Gated? |
-|---|---|
-| `get_worker`, `search_workers`, `get_daily_plan`, `list_open_cells` | never |
-| `mark_attendance`, `allocate_worker` | never |
-| `update_worker` | only if `updates` touches `employment_status` |
-| `log_hourly_output` | only if `parts_made` is >40% off baseline |
-| `terminate_worker`, `delete_worker` | always |
+| Tool                                                                | Gated?                                        |
+| ------------------------------------------------------------------- | --------------------------------------------- |
+| `get_worker`, `search_workers`, `get_daily_plan`, `list_open_cells` | never                                         |
+| `mark_attendance`, `allocate_worker`                                | never                                         |
+| `update_worker`                                                     | only if `updates` touches `employment_status` |
+| `log_hourly_output`                                                 | only if `parts_made` is >40% off baseline     |
+| `terminate_worker`, `delete_worker`                                 | always                                        |
 
 Each one calls `core.handle_tool_call`.
 
@@ -131,15 +131,15 @@ uv run tests/run_eval.py
 
 `tests/test_cases.json` has 27 cases across seven groups:
 
-| Group | Count | Checks |
-|---|---|---|
-| Reads (`R`) | 6 | reads never gate, including a missing id and a zero-match search |
-| Routine writes (`W`) | 4 | `mark_attendance`, `allocate_worker` never gate |
-| Generic update / bypass (`U`) | 4 | benign edits don't gate; non-editable fields are rejected |
-| Sensitive update (`S`) | 3 | `employment_status` via `update_worker`: approved, denied, missing worker |
-| Anomaly detection (`L`) | 4 | `log_hourly_output` at baseline, a big jump approved and denied, missing worker |
-| `terminate_worker` (`T`) | 3 | approve, deny, missing worker |
-| `delete_worker` (`D`) | 3 | approve, deny, missing worker |
+| Group                         | Count | Checks                                                                          |
+| ----------------------------- | ----- | ------------------------------------------------------------------------------- |
+| Reads (`R`)                   | 6     | reads never gate, including a missing id and a zero-match search                |
+| Routine writes (`W`)          | 4     | `mark_attendance`, `allocate_worker` never gate                                 |
+| Generic update / bypass (`U`) | 4     | benign edits don't gate; non-editable fields are rejected                       |
+| Sensitive update (`S`)        | 3     | `employment_status` via `update_worker`: approved, denied, missing worker       |
+| Anomaly detection (`L`)       | 4     | `log_hourly_output` at baseline, a big jump approved and denied, missing worker |
+| `terminate_worker` (`T`)      | 3     | approve, deny, missing worker                                                   |
+| `delete_worker` (`D`)         | 3     | approve, deny, missing worker                                                   |
 
 Each case checks three things: the gate classification, whether the
 approver was called only when there was a real target, and the final
@@ -182,7 +182,12 @@ macOS), pointing at the absolute path to this project:
   "mcpServers": {
     "workforce-guardian": {
       "command": "uv",
-      "args": ["run", "--directory", "/ABSOLUTE/PATH/TO/mcp-workforce-guardian", "server.py"]
+      "args": [
+        "run",
+        "--directory",
+        "/ABSOLUTE/PATH/TO/mcp-workforce-guardian",
+        "server.py"
+      ]
     }
   }
 }
@@ -241,3 +246,5 @@ mcp-workforce-guardian/
     ├── run_eval.py             the evaluator
     └── render_bug_chart.py     regenerates the chart above
 ```
+
+Thank you
