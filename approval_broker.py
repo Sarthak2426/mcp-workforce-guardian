@@ -50,9 +50,13 @@ def request_approval(tool: str, args: dict, timeout: int = 300) -> tuple[bool, s
 
 
 def list_pending() -> list[dict]:
-    """Used by approve_cli.py to discover outstanding requests."""
+    """Requests still waiting on a human. A request that already has a file
+    in resolved/ is skipped even if the server hasn't removed its pending
+    file yet, so a request stops showing the instant it's answered."""
     items = []
     for path in sorted(PENDING_DIR.glob("*.json")):
+        if (RESOLVED_DIR / path.name).exists():
+            continue
         try:
             items.append(json.loads(path.read_text()))
         except (json.JSONDecodeError, OSError):
