@@ -1,0 +1,20 @@
+[project]
+name = "mcp-crm-guardian"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "sa2426", email = "i.jarvis2426@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "fastmcp>=4.0.1",
+    "matplotlib>=3.11.1",
+]
+
+[project.scripts]
+mcp-crm-guardian = "mcp_crm_guardian:main"
+
+[build-system]
+requires = ["uv_build>=0.12.2,<0.13.0"]
+build-backend = "uv_build"
