@@ -11,6 +11,8 @@ and mutate the same kind of worker records (line/cell assignment, hourly
 output, attendance, employment status), but every dangerous change has to
 be approved by a human before it runs.
 
+![Agent tries to delete a worker; a human denies it in the approval console; the agent reports the record was untouched](docs/demo.gif)
+
 ## How approval works
 
 Claude Desktop talks to `server.py` over stdio, and that channel is
