@@ -1,0 +1,459 @@
+[
+    {
+        "id": "R01",
+        "description": "Get an existing worker",
+        "tool": "get_worker",
+        "args": {
+            "worker_id": "W1010"
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "R02",
+        "description": "Get a nonexistent worker",
+        "tool": "get_worker",
+        "args": {
+            "worker_id": "W9999"
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "R03",
+        "description": "Search with matches",
+        "tool": "search_workers",
+        "args": {
+            "query": "a"
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "R04",
+        "description": "Search with no matches",
+        "tool": "search_workers",
+        "args": {
+            "query": "zzznotfound"
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "R05",
+        "description": "Get today's plan",
+        "tool": "get_daily_plan",
+        "args": {},
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "R06",
+        "description": "List short-staffed cells",
+        "tool": "list_open_cells",
+        "args": {},
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "W01",
+        "description": "Mark absent, not gated",
+        "tool": "mark_attendance",
+        "args": {
+            "worker_id": "W1011",
+            "present": false
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1011",
+                "field": "present_today",
+                "value": false
+            }
+        ]
+    },
+    {
+        "id": "W02",
+        "description": "Mark present, not gated",
+        "tool": "mark_attendance",
+        "args": {
+            "worker_id": "W1011",
+            "present": true
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1011",
+                "field": "present_today",
+                "value": true
+            }
+        ]
+    },
+    {
+        "id": "W03",
+        "description": "Reassign to an open cell, not gated",
+        "tool": "allocate_worker",
+        "args": {
+            "worker_id": "W1013",
+            "line": "Line 5",
+            "cell": "Cell 2"
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1013",
+                "field": "current_line",
+                "value": "Line 5"
+            },
+            {
+                "type": "field_equals",
+                "worker_id": "W1013",
+                "field": "current_cell",
+                "value": "Cell 2"
+            }
+        ]
+    },
+    {
+        "id": "W04",
+        "description": "Allocate a nonexistent worker short-circuits",
+        "tool": "allocate_worker",
+        "args": {
+            "worker_id": "W9999",
+            "line": "Line 5",
+            "cell": "Cell 2"
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "U01",
+        "description": "Update skill_level, not gated",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W1014",
+            "updates": {
+                "skill_level": "Expert"
+            }
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1014",
+                "field": "skill_level",
+                "value": "Expert"
+            }
+        ]
+    },
+    {
+        "id": "U02",
+        "description": "Update notes, not gated",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W1015",
+            "updates": {
+                "notes": "Reviewed by QA"
+            }
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1015",
+                "field": "notes",
+                "value": "Reviewed by QA"
+            }
+        ]
+    },
+    {
+        "id": "U03",
+        "description": "Empty updates dict errors",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W1016",
+            "updates": {}
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "U04",
+        "description": "Bypass attempt: editing total_parts_made via update_worker is blocked",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W1016",
+            "updates": {
+                "total_parts_made": 99999
+            }
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "S01",
+        "description": "Sensitive field edit, approved",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W1017",
+            "updates": {
+                "employment_status": "on_leave"
+            }
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "approve",
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1017",
+                "field": "employment_status",
+                "value": "on_leave"
+            }
+        ]
+    },
+    {
+        "id": "S02",
+        "description": "Sensitive field edit, denied",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W1018",
+            "updates": {
+                "employment_status": "on_leave"
+            }
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "deny",
+        "expect_status": "rejected",
+        "post_checks": [
+            {
+                "type": "field_unchanged",
+                "worker_id": "W1018",
+                "field": "employment_status"
+            }
+        ]
+    },
+    {
+        "id": "S03",
+        "description": "Sensitive edit on nonexistent worker short-circuits",
+        "tool": "update_worker",
+        "args": {
+            "worker_id": "W9999",
+            "updates": {
+                "employment_status": "on_leave"
+            }
+        },
+        "expect_gated": true,
+        "expect_approve_called": false,
+        "decision": "approve",
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "L01",
+        "description": "Normal hourly output, not gated",
+        "tool": "log_hourly_output",
+        "args": {
+            "worker_id": "W1019",
+            "parts_made": "BASELINE",
+            "rejected_parts": 1
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "L02",
+        "description": "Anomalous jump, approved",
+        "tool": "log_hourly_output",
+        "args": {
+            "worker_id": "W1020",
+            "parts_made": "BASELINE*3",
+            "rejected_parts": 1
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "approve",
+        "expect_status": "ok",
+        "post_checks": []
+    },
+    {
+        "id": "L03",
+        "description": "Anomalous jump, denied",
+        "tool": "log_hourly_output",
+        "args": {
+            "worker_id": "W1021",
+            "parts_made": "BASELINE*3",
+            "rejected_parts": 1
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "deny",
+        "expect_status": "rejected",
+        "post_checks": []
+    },
+    {
+        "id": "L04",
+        "description": "Hourly output for nonexistent worker short-circuits",
+        "tool": "log_hourly_output",
+        "args": {
+            "worker_id": "W9999",
+            "parts_made": 40,
+            "rejected_parts": 1
+        },
+        "expect_gated": false,
+        "expect_approve_called": false,
+        "decision": null,
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "T01",
+        "description": "Terminate, approved",
+        "tool": "terminate_worker",
+        "args": {
+            "worker_id": "W1022"
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "approve",
+        "expect_status": "ok",
+        "post_checks": [
+            {
+                "type": "field_equals",
+                "worker_id": "W1022",
+                "field": "employment_status",
+                "value": "terminated"
+            }
+        ]
+    },
+    {
+        "id": "T02",
+        "description": "Terminate, denied",
+        "tool": "terminate_worker",
+        "args": {
+            "worker_id": "W1023"
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "deny",
+        "expect_status": "rejected",
+        "post_checks": [
+            {
+                "type": "field_unchanged",
+                "worker_id": "W1023",
+                "field": "employment_status"
+            }
+        ]
+    },
+    {
+        "id": "T03",
+        "description": "Terminate nonexistent worker short-circuits",
+        "tool": "terminate_worker",
+        "args": {
+            "worker_id": "W9999"
+        },
+        "expect_gated": true,
+        "expect_approve_called": false,
+        "decision": "approve",
+        "expect_status": "error",
+        "post_checks": []
+    },
+    {
+        "id": "D01",
+        "description": "Delete, approved",
+        "tool": "delete_worker",
+        "args": {
+            "worker_id": "W1024"
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "approve",
+        "expect_status": "deleted",
+        "post_checks": [
+            {
+                "type": "worker_removed",
+                "worker_id": "W1024"
+            }
+        ]
+    },
+    {
+        "id": "D02",
+        "description": "Delete, denied",
+        "tool": "delete_worker",
+        "args": {
+            "worker_id": "W1025"
+        },
+        "expect_gated": true,
+        "expect_approve_called": true,
+        "decision": "deny",
+        "expect_status": "rejected",
+        "post_checks": [
+            {
+                "type": "worker_exists",
+                "worker_id": "W1025"
+            }
+        ]
+    },
+    {
+        "id": "D03",
+        "description": "Delete nonexistent worker short-circuits",
+        "tool": "delete_worker",
+        "args": {
+            "worker_id": "W9999"
+        },
+        "expect_gated": true,
+        "expect_approve_called": false,
+        "decision": "approve",
+        "expect_status": "error",
+        "post_checks": []
+    }
+]
