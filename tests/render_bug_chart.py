@@ -1,13 +1,9 @@
 """
-render_bug_chart.py — generates docs/employment_status_bug.png, a chart
-showing exactly which of the 27 eval cases failed when SENSITIVE_FIELDS
-was deliberately emptied (simulating someone forgetting to keep
-'employment_status' on the sensitive-fields list). Not part of the test
-suite itself — this is a one-off documentation/portfolio chart, built
-from the real eval output captured during that exercise.
+Generates docs/worker_gate_bug.png: which of the 27 eval cases failed when
+employment_status was removed from SENSITIVE_UPDATE_FIELDS. Built from the
+eval output captured during that run; not part of the test suite.
 
-Run it with:
-    python3 tests/render_bug_chart.py
+    python tests/render_bug_chart.py
 """
 
 import matplotlib
@@ -24,8 +20,8 @@ TEXT_MUTED = "#8a8983"
 SURFACE = "#fcfcfb"
 GRID = "#e4e3de"
 
-# (id, description, passed) — real results from the run with
-# SENSITIVE_FIELDS = set() instead of {"employment_status"}
+# (id, description, passed) from the run with
+# SENSITIVE_UPDATE_FIELDS = set() instead of {"employment_status"}
 GROUPS = [
     ("Reads", [
         ("R01", "Get an existing worker", True),
@@ -123,9 +119,9 @@ ax.axis("off")
 
 passed_n = sum(1 for r in rows if r[3])
 failed_n = n - passed_n
-title = f"Eval run with employment_status removed from SENSITIVE_FIELDS"
-subtitle = (f"{passed_n}/{n} passed ({100*passed_n/n:.1f}%)  —  only the 3 cases "
-            f"testing the employment_status gate noticed the missing rule")
+title = "Eval run with employment_status removed from SENSITIVE_UPDATE_FIELDS"
+subtitle = (f"{passed_n}/{n} passed ({100*passed_n/n:.1f}%) - only the 3 cases "
+            f"testing the employment_status gate caught the missing rule")
 
 fig.text(0.06, 0.975, title, fontsize=12.5, fontweight="bold", color=TEXT_PRIMARY, ha="left")
 fig.text(0.06, 0.955, subtitle, fontsize=9.5, color=TEXT_SECONDARY, ha="left")
@@ -143,6 +139,6 @@ plt.tight_layout(rect=[0, 0, 1, 0.94])
 
 out_dir = Path(__file__).parent.parent / "docs"
 out_dir.mkdir(exist_ok=True)
-out_path = out_dir / "employment_status_bug.png"
+out_path = out_dir / "worker_gate_bug.png"
 plt.savefig(out_path, facecolor=SURFACE, bbox_inches="tight")
 print(f"wrote {out_path}")

@@ -1,13 +1,10 @@
 """
-approval_broker.py — the human-in-the-loop side channel.
+File-based approval queue.
 
-server.py can't just call input() to ask a human something directly,
-because it talks to Claude Desktop over stdio (stdin/stdout), and that
-channel is already busy carrying the MCP protocol itself. So instead:
-server.py drops a small request file into approvals/pending/ and waits
-(polling approvals/resolved/ once a second) for a matching decision to
-show up. approve_cli.py — a separate program with its own real terminal —
-is what actually shows a human the request and writes the decision.
+The MCP server talks to its client over stdio, so it can't prompt a human
+directly. Instead it writes a request into approvals/pending/ and polls
+approvals/resolved/ for the answer. approve_cli.py, run in a separate
+terminal, is what shows the request to a human and records the decision.
 """
 
 import json
@@ -24,10 +21,9 @@ RESOLVED_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def request_approval(tool: str, args: dict, timeout: int = 300) -> tuple[bool, str]:
-    """Blocking call: write a pending request, wait for a human (running
-    approve_cli.py) to resolve it, return (approved, reason). Fails closed
-    (denied) on timeout -- an unanswered destructive request should NOT
-    execute by default."""
+    """Write a pending request and block until a human resolves it via
+    approve_cli.py. Returns (approved, reason). On timeout it fails closed,
+    treating no answer as a denial."""
     request_id = str(uuid.uuid4())[:8]
     pending_path = PENDING_DIR / f"{request_id}.json"
     resolved_path = RESOLVED_DIR / f"{request_id}.json"

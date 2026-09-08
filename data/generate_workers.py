@@ -1,22 +1,11 @@
 """
-generate_workers.py — produces workers.json and daily_plan.json at the
-scale you actually tested the real Metalman system at (600+ workers)
-instead of hand-typing 600 JSON objects, which nobody should ever do.
+Generates workers.json (600 workers) and daily_plan.json.
 
-This is worth understanding, not just running: real test datasets at this
-scale are basically always generated, not hand-written — you define
-realistic distributions (skill level mix, efficiency correlated with
-skill, rejection rate inversely correlated with skill, occasional
-absence/leave/termination rates) and let code produce consistent, varied
-records. That's a legitimate thing to say you did in an interview:
-"I generated a synthetic 600-worker dataset with realistic distributions
-rather than hand-authoring it."
+Skill level, efficiency, rejection rate, and employment status are drawn
+from fixed distributions. The random seed is fixed, so re-running produces
+the same dataset and test cases can reference specific worker_ids.
 
-Run it with:
-    python3 generate_workers.py
-It's deterministic (fixed random seed) so re-running it gives you the
-exact same dataset back — useful once your test cases start referencing
-specific worker_ids.
+    python generate_workers.py
 """
 
 import json
@@ -50,9 +39,7 @@ LAST_NAMES = [
 SKILL_LEVELS = ["Beginner", "Intermediate", "Expert"]
 SKILL_WEIGHTS = [0.25, 0.50, 0.25]
 
-# efficiency and rejection rate ranges by skill level -- experts are more
-# efficient AND make fewer rejects; this correlation matters later when
-# we build test cases around "does a high-skill worker's data look right"
+# experts are more efficient and reject fewer parts
 EFFICIENCY_RANGE = {
     "Beginner": (55, 68),
     "Intermediate": (68, 82),

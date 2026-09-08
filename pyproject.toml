@@ -1,10 +1,10 @@
 [project]
-name = "mcp-crm-guardian"
+name = "mcp-workforce-guardian"
 version = "0.1.0"
-description = "Add your description here"
+description = "MCP server that puts a human approval step in front of destructive and anomalous workforce operations"
 readme = "README.md"
 authors = [
-    { name = "sa2426", email = "i.jarvis2426@gmail.com" }
+    { name = "sa2426", email = "sarthak.jindal2426@gmail.com" }
 ]
 requires-python = ">=3.12"
 dependencies = [
@@ -12,9 +12,5 @@ dependencies = [
     "matplotlib>=3.11.1",
 ]
 
-[project.scripts]
-mcp-crm-guardian = "mcp_crm_guardian:main"
-
-[build-system]
-requires = ["uv_build>=0.12.2,<0.13.0"]
-build-backend = "uv_build"
+[tool.uv]
+package = false

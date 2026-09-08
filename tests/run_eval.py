@@ -16,11 +16,9 @@ PRISTINE_BACKUP = TESTS_DIR / "_workers_pristine_backup.json"
 
 
 def resolve_args(args: dict, workers: list[dict]) -> dict:
-    """Turn 'BASELINE' / 'BASELINE*3' placeholders into real numbers, based
-    on the worker's ACTUAL current avg_hourly_output -- since our 600-row
-    dataset isn't a fixed fixture, we compute test inputs relative to real
-    data instead of guessing fixed numbers that might not hold for every
-    worker."""
+    """Replace 'BASELINE' / 'BASELINE*3' in a test case with a real number
+    computed from the worker's current avg_hourly_output, so anomaly cases
+    don't depend on hard-coded values."""
     resolved = dict(args)
     worker_id = args.get("worker_id")
     if worker_id and isinstance(resolved.get("parts_made"), str):
@@ -134,7 +132,7 @@ def main() -> None:
             else:
                 passed += 1
     finally:
-        shutil.copy(PRISTINE_BACKUP, DATA_PATH)  # restore your real data
+        shutil.copy(PRISTINE_BACKUP, DATA_PATH)  # restore the real data
         PRISTINE_BACKUP.unlink(missing_ok=True)
 
     total = len(cases)

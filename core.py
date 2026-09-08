@@ -6,9 +6,7 @@ WORKERS_PATH = DATA_DIR / "workers.json"
 PLAN_PATH = DATA_DIR / "daily_plan.json"
 
 
-# ---------------------------------------------------------------------------
-# loading and saving
-# ---------------------------------------------------------------------------
+# --- loading and saving ---
 
 def _load_workers() -> list[dict]:
     with open(WORKERS_PATH, "r", encoding="utf-8") as f:
@@ -29,9 +27,7 @@ def _find_worker(workers: list[dict], worker_id: str) -> dict | None:
     return next((w for w in workers if w["worker_id"] == worker_id), None)
 
 
-# ---------------------------------------------------------------------------
-# read-only tools
-# ---------------------------------------------------------------------------
+# --- read-only tools ---
 
 def get_worker(worker_id: str) -> dict:
     workers = _load_workers()
@@ -53,7 +49,7 @@ def get_daily_plan() -> dict:
 
 
 def list_open_cells() -> dict:
-    """Compare who's actually present against each cell's required headcount."""
+    """Cells where the number of active, present workers is below the plan."""
     workers = _load_workers()
     plan = _load_plan()
     open_cells = []
@@ -78,19 +74,17 @@ def list_open_cells() -> dict:
     return {"status": "ok", "open_cells": open_cells}
 
 
-# ---------------------------------------------------------------------------
-# gating brain
-# ---------------------------------------------------------------------------
+# --- approval gating ---
 
 DESTRUCTIVE_TOOLS = {"terminate_worker", "delete_worker"}
 SENSITIVE_UPDATE_FIELDS = {"employment_status"}
-ANOMALY_THRESHOLD = 0.4  # a reading more than 40% off baseline gets flagged
+ANOMALY_THRESHOLD = 0.4  # flag a reading more than 40% off the worker's baseline
 
 
 def _is_anomalous_output(worker: dict, parts_made: int) -> bool:
     baseline = worker["avg_hourly_output"]
     if baseline == 0:
-        return True  # no baseline to compare against -- play it safe
+        return True
     deviation = abs(parts_made - baseline) / baseline
     return deviation > ANOMALY_THRESHOLD
 
@@ -106,15 +100,13 @@ def requires_approval(tool: str, args: dict, workers: list[dict]) -> bool:
     if tool == "log_hourly_output":
         worker = _find_worker(workers, args["worker_id"])
         if worker is None:
-            return False  # precheck will catch the missing worker
+            return False  # precheck rejects the missing worker first
         return _is_anomalous_output(worker, args["parts_made"])
 
     return False
 
 
-# ---------------------------------------------------------------------------
-# precheck -- catches a bad call before anyone gets bothered
-# ---------------------------------------------------------------------------
+# --- precheck: reject bad calls before the approval step ---
 
 UPDATE_WORKER_EDITABLE_FIELDS = {"skill_level", "employment_status", "notes", "age"}
 
@@ -145,9 +137,7 @@ def precheck(tool: str, args: dict, workers: list[dict]) -> dict | None:
     return None
 
 
-# ---------------------------------------------------------------------------
-# mutations
-# ---------------------------------------------------------------------------
+# --- mutations ---
 
 READ_ONLY_TOOLS = {"get_worker", "search_workers", "get_daily_plan", "list_open_cells"}
 
@@ -189,9 +179,7 @@ def _apply_mutation(tool: str, args: dict, workers: list[dict]) -> dict:
     return {"status": "error", "message": f"Unknown tool '{tool}'."}
 
 
-# ---------------------------------------------------------------------------
-# the single entry point server.py calls for every tool
-# ---------------------------------------------------------------------------
+# --- entry point used by server.py for every tool ---
 
 def handle_tool_call(tool: str, args: dict, approve_fn=None) -> dict:
     if tool in READ_ONLY_TOOLS:

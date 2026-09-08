@@ -51,10 +51,9 @@ def allocate_worker(worker_id: str, line: str, cell: str) -> dict:
 @mcp.tool()
 def update_worker(worker_id: str, updates: dict) -> dict:
     """
-    Update a worker's editable fields (skill_level, employment_status, notes,
-    age). Edits touching employment_status require human approval. To record
-    hourly output/rejected parts, use log_hourly_output instead -- this tool
-    cannot touch those fields.
+    Update a worker's editable fields: skill_level, employment_status, notes,
+    age. Changes to employment_status require human approval. Output and
+    rejected-part counts are not editable here; use log_hourly_output.
     """
     return core.handle_tool_call(
         "update_worker", {"worker_id": worker_id, "updates": updates},
@@ -65,10 +64,8 @@ def update_worker(worker_id: str, updates: dict) -> dict:
 @mcp.tool()
 def log_hourly_output(worker_id: str, parts_made: int, rejected_parts: int) -> dict:
     """
-    Record this hour's output for a worker. If the reported numbers deviate
-    significantly from the worker's normal rate, this requires human
-    approval before being committed -- guards against misheard or
-    misparsed numbers being written straight into the record.
+    Record this hour's output for a worker. If the reported count is far from
+    the worker's normal rate, the write requires human approval first.
     """
     return core.handle_tool_call(
         "log_hourly_output",
