@@ -1,5 +1,7 @@
 # MCP Workforce Guardian
 
+[![eval](https://github.com/Sarthak2426/mcp-workforce-guardian/actions/workflows/eval.yml/badge.svg)](https://github.com/Sarthak2426/mcp-workforce-guardian/actions/workflows/eval.yml)
+
 An MCP server for a factory workforce dataset that puts a human approval
 step in front of destructive and anomalous operations, with a 27-case
 eval that checks the gate behaves correctly.

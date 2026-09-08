@@ -112,7 +112,7 @@ def run_case(case: dict) -> tuple[bool, list[str]]:
     return len(problems) == 0, problems
 
 
-def main() -> None:
+def main() -> int:
     shutil.copy(DATA_PATH, PRISTINE_BACKUP)
     cases = json.loads((TESTS_DIR / "test_cases.json").read_text())
 
@@ -145,6 +145,8 @@ def main() -> None:
             print(f"  {case_id}: {'; '.join(problems)}")
     print("=" * 60)
 
+    return 1 if failures else 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
